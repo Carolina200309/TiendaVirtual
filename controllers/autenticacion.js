@@ -12,18 +12,18 @@ function registrarUsuario(req, resp){
     var password = 
     bcrypt.hashSync(parametros.password, salt);
 
-    var rolesPermitidos = ['administrador', 'distribuidor'];
+    /*var rolesPermitidos = ['administrador', 'distribuidor'];
     var rolValidado = parametros.rol ? parametros.rol.toLowerCase().trim() : '';
  
         if (!rolesPermitidos.includes(rolValidado)) {
             return resp.status(400).send({
                 message: "El rol proporcionado no es válido. Debe ser 'administrador' o 'distribuidor'."
             });
-        }
+        }*/
 
     var nuevoUsuario  = new Usuario();
     nuevoUsuario.username = parametros.username;
-    nuevoUsuario.rol = parametros.rol;
+    nuevoUsuario.rol = 'distribuidor';
     nuevoUsuario.password = password;
 
     nuevoUsuario.save().then(
