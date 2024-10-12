@@ -13,7 +13,7 @@ mongoose.connect(
             console.log("Conexion exitosa");
             application.listen(9898, function(){
 
-                checkUserRoles("administrador", "distribuidor")
+                checkUserRoles("administrador", "distribuidor");
 
                 console.log("Aplicacion inciada");
             });
@@ -26,14 +26,16 @@ mongoose.connect(
 function checkUserRoles(...roles) {
     const salt = bcrypt.genSaltSync(10);
     roles.forEach(role => {
-        const query = Usuario.findOne({rol: role})
+        Usuario.findOne({rol: role}).then(query => {
+            if (!query) {
+                console.log("Creando un usuario para "+role);
+                const newUser = new Usuario({
+                    username: role,
+                    password: bcrypt.hashSync("123", salt),
+                    rol: role,
+                }).save();
+            }
+        });
 
-        if (!query) {
-            const newUser = new Usuario({
-                username: role,
-                password: bcrypt.hashSync("123", salt),
-                rol: role,
-            }).save();
-        }
     });
 }
